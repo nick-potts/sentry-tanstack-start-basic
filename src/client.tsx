@@ -1,5 +1,9 @@
 // src/client.tsx
-import { StartClient } from "@tanstack/react-start";
+import {
+  createMiddleware,
+  registerGlobalMiddleware,
+  StartClient,
+} from "@tanstack/react-start";
 import { StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { createRouter } from "./router";
@@ -15,6 +19,15 @@ Sentry.init({
   // For example, automatic IP address collection on events
   sendDefaultPii: true,
   enabled: false,
+});
+
+registerGlobalMiddleware({
+  middleware: [
+    createMiddleware({ type: "function" }).client(({ next }) => {
+      console.log("global client middleware running");
+      return next();
+    }),
+  ],
 });
 
 hydrateRoot(

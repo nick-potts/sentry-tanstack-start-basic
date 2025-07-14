@@ -2,12 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createServerFileRoute } from "@tanstack/react-start/server";
 import { useState } from "react";
 
-export const ServerRoute = createServerFileRoute("/api-boom").methods({
-  POST: async ({ request }) => {
-    throw new Error("Boom!");
-  },
-});
-
 export const Route = createFileRoute("/api-boom")({
   component: RouteComponent,
 });
@@ -22,7 +16,7 @@ function RouteComponent() {
     <>
       <button
         onClick={() => {
-          fetch("/api-boom", {
+          fetch("/api/boom", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

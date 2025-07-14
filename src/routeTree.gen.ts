@@ -16,10 +16,7 @@ import { Route as RedirectRouteImport } from './routes/redirect'
 import { Route as PostsRouteImport } from './routes/posts'
 import { Route as DeferredRouteImport } from './routes/deferred'
 import { Route as BoomRouteImport } from './routes/boom'
-import {
-  Route as ApiBoomRouteImport,
-  ServerRoute as ApiBoomServerRouteImport,
-} from './routes/api-boom'
+import { Route as ApiBoomRouteImport } from './routes/api-boom'
 import { Route as PathlessLayoutRouteImport } from './routes/_pathlessLayout'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UsersIndexRouteImport } from './routes/users.index'
@@ -32,6 +29,7 @@ import { Route as PathlessLayoutNestedLayoutRouteBRouteImport } from './routes/_
 import { Route as PathlessLayoutNestedLayoutRouteARouteImport } from './routes/_pathlessLayout/_nested-layout/route-a'
 import { ServerRoute as CustomScriptDotjsServerRouteImport } from './routes/customScript[.]js'
 import { ServerRoute as ApiUsersServerRouteImport } from './routes/api/users'
+import { ServerRoute as ApiBoomServerRouteImport } from './routes/api/boom'
 import { ServerRoute as ApiUsersUserIdServerRouteImport } from './routes/api/users.$userId'
 
 const rootServerRouteImport = createServerRootRoute()
@@ -122,14 +120,14 @@ const CustomScriptDotjsServerRoute = CustomScriptDotjsServerRouteImport.update({
   path: '/customScript.js',
   getParentRoute: () => rootServerRouteImport,
 } as any)
-const ApiBoomServerRoute = ApiBoomServerRouteImport.update({
-  id: '/api-boom',
-  path: '/api-boom',
-  getParentRoute: () => rootServerRouteImport,
-} as any)
 const ApiUsersServerRoute = ApiUsersServerRouteImport.update({
   id: '/api/users',
   path: '/api/users',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
+const ApiBoomServerRoute = ApiBoomServerRouteImport.update({
+  id: '/api/boom',
+  path: '/api/boom',
   getParentRoute: () => rootServerRouteImport,
 } as any)
 const ApiUsersUserIdServerRoute = ApiUsersUserIdServerRouteImport.update({
@@ -250,44 +248,44 @@ export interface RootRouteChildren {
   PostsPostIdDeepRoute: typeof PostsPostIdDeepRoute
 }
 export interface FileServerRoutesByFullPath {
-  '/api-boom': typeof ApiBoomServerRoute
   '/customScript.js': typeof CustomScriptDotjsServerRoute
+  '/api/boom': typeof ApiBoomServerRoute
   '/api/users': typeof ApiUsersServerRouteWithChildren
   '/api/users/$userId': typeof ApiUsersUserIdServerRoute
 }
 export interface FileServerRoutesByTo {
-  '/api-boom': typeof ApiBoomServerRoute
   '/customScript.js': typeof CustomScriptDotjsServerRoute
+  '/api/boom': typeof ApiBoomServerRoute
   '/api/users': typeof ApiUsersServerRouteWithChildren
   '/api/users/$userId': typeof ApiUsersUserIdServerRoute
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
-  '/api-boom': typeof ApiBoomServerRoute
   '/customScript.js': typeof CustomScriptDotjsServerRoute
+  '/api/boom': typeof ApiBoomServerRoute
   '/api/users': typeof ApiUsersServerRouteWithChildren
   '/api/users/$userId': typeof ApiUsersUserIdServerRoute
 }
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
   fullPaths:
-    | '/api-boom'
     | '/customScript.js'
+    | '/api/boom'
     | '/api/users'
     | '/api/users/$userId'
   fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/api-boom' | '/customScript.js' | '/api/users' | '/api/users/$userId'
+  to: '/customScript.js' | '/api/boom' | '/api/users' | '/api/users/$userId'
   id:
     | '__root__'
-    | '/api-boom'
     | '/customScript.js'
+    | '/api/boom'
     | '/api/users'
     | '/api/users/$userId'
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
-  ApiBoomServerRoute: typeof ApiBoomServerRoute
   CustomScriptDotjsServerRoute: typeof CustomScriptDotjsServerRoute
+  ApiBoomServerRoute: typeof ApiBoomServerRoute
   ApiUsersServerRoute: typeof ApiUsersServerRouteWithChildren
 }
 
@@ -416,18 +414,18 @@ declare module '@tanstack/react-start/server' {
       preLoaderRoute: typeof CustomScriptDotjsServerRouteImport
       parentRoute: typeof rootServerRouteImport
     }
-    '/api-boom': {
-      id: '/api-boom'
-      path: '/api-boom'
-      fullPath: '/api-boom'
-      preLoaderRoute: typeof ApiBoomServerRouteImport
-      parentRoute: typeof rootServerRouteImport
-    }
     '/api/users': {
       id: '/api/users'
       path: '/api/users'
       fullPath: '/api/users'
       preLoaderRoute: typeof ApiUsersServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/boom': {
+      id: '/api/boom'
+      path: '/api/boom'
+      fullPath: '/api/boom'
+      preLoaderRoute: typeof ApiBoomServerRouteImport
       parentRoute: typeof rootServerRouteImport
     }
     '/api/users/$userId': {
@@ -521,8 +519,8 @@ export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 const rootServerRouteChildren: RootServerRouteChildren = {
-  ApiBoomServerRoute: ApiBoomServerRoute,
   CustomScriptDotjsServerRoute: CustomScriptDotjsServerRoute,
+  ApiBoomServerRoute: ApiBoomServerRoute,
   ApiUsersServerRoute: ApiUsersServerRouteWithChildren,
 }
 export const serverRouteTree = rootServerRouteImport

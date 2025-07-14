@@ -18,6 +18,8 @@ Sentry.init({
   // For example, automatic IP address collection on events
   sendDefaultPii: true,
   tracesSampleRate: 1.0,
+  _experiments: { enableLogs: true },
+  clientReportFlushInterval: 1000,
 
   beforeSend(event) {
     console.log("event sent to sentry", event);
@@ -27,11 +29,16 @@ Sentry.init({
     console.log("breadcrumb sent to sentry", breadcrumb);
     return breadcrumb;
   },
+  beforeSendSpan(span) {
+    console.log("span sent to sentry", span);
+    return span;
+  },
 });
 
 registerGlobalMiddleware({
   middleware: [
     createMiddleware({ type: "function" }).server(({ next }) => {
+      console.log("global server middleware running");
       return next();
     }),
     createMiddleware({ type: "function" }).server(
